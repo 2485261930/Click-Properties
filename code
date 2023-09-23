@@ -1,0 +1,73 @@
+// ==UserScript==
+// @name         点击特效
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        *://*/*
+// @include      *
+// @require      https://libs.baidu.com/jquery/1.11.3/jquery.min.js
+
+// 添加 css 样式
+// @grant        GM_addStyle
+
+
+// ==/UserScript==
+// 添加 css 样式
+function addStyle() {
+    let css = `
+
+    `
+    GM_addStyle(css)
+}
+
+(function() {
+    'use strict';
+
+    // Your code here...
+    //alert("用户名格式错误！！！")
+    addStyle()
+     $(function () {
+      // 初始变量索引值
+      var a_idx = 0,
+        b_idx = 0,
+        c_idx = 0;
+      jQuery(document).ready(function ($) {
+        $("body").click(function (e) {
+          // a 文字  b 颜色 c 字体大小
+          var a = new Array("欢迎您", "么么哒", "你真好", "棒棒哒", "真可爱", "你最美", "喜欢你", "真聪明", "爱你哦", "好厉害", "你真帅", "祝福你"),
+            b = new Array("#09ebfc", "#ff6651", "#ffb351", "#51ff65", "#5197ff", "#a551ff", "#ff51f7", "#ff518e", "#ff5163", "#efff51"),
+            c = new Array("12", "14", "16", "18", "20", "22", "24", "26", "28", "30");
+          // 创建一个span标签,内容是文字数组索引值
+          var $i = $("<span/>").text(a[a_idx]);
+          // 每单击一次,索引值自增 取模运算是为了循环 9%9归0
+          a_idx = (a_idx + 1) % a.length;
+          b_idx = (b_idx + 1) % b.length;
+          c_idx = (c_idx + 1) % c.length;
+          // 拿到距离文档左上的距离值
+          var x = e.pageX,
+            y = e.pageY;
+          // 绝对定位和偏移值,色号与子体大小采用数组内值
+          $i.css({
+            "z-index": 999,
+            "top": y - 20,
+            "left": x,
+            "position": "absolute",
+            "font-weight": "bold",
+            "font-size": c[c_idx] + "px",
+            "color": b[b_idx]
+              ,"user-select": "none"
+          });
+          $("body").append($i);
+          // 执行动画
+          $i.animate({
+            "top": y - 180,
+            "opacity": 0
+            // 回调函数删除元素
+          }, 1500, function () {
+            $i.remove();
+          });
+        });
+      });
+    })
+})();
